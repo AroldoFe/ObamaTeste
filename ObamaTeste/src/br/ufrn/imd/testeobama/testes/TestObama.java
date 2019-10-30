@@ -60,6 +60,7 @@ public class TestObama {
 	
 	@Test
 	public void testEditarPlanoDeAula() throws InterruptedException {
+		testDeletarPlanosDeAula();
 		testCadastroPlanoAula();
 	    // Acessando formulário
 	    // Verificando se foi cadastrado
@@ -72,9 +73,10 @@ public class TestObama {
 	    	List<WebElement> tds = tr.findElements(By.tagName("td"));
 	    	if(tds.get(0).getText().contains("Funções")) {
 	    		WebElement lastTd = tds.get(tds.size() - 1);
-	    		lastTd.findElement(By.id("btnEditar")).click();
-
-	    		break;
+	    		if(lastTd.findElement(By.id("btnEditar")) != null) {
+	    			lastTd.findElement(By.id("btnEditar")).click();
+	    			break;
+	    		}
 	    	}
 	    }
 	    
@@ -126,6 +128,48 @@ public class TestObama {
 	    	fail();
 	    }
 	    assertTrue(true);
+	    
+	}
+	
+	@Test
+	public void testEnviarParaRevisao () throws InterruptedException {
+		testCadastroPlanoAula();
+		driver.get("https://hobama.imd.ufrn.br/planoDeAula/meusPlanosDeAula");
+	    
+		WebElement table = driver.findElement(By.className("tabela-planoDeAula"));
+	    WebElement tbody = table.findElement(By.tagName("tbody"));
+	    
+	    for(WebElement tr: tbody.findElements(By.tagName("tr"))) {
+	    	List<WebElement> tds = tr.findElements(By.tagName("td"));
+	    	if(tds.get(0).getText().contains("Funções")) {
+	    		WebElement lastTd = tds.get(tds.size() - 1);
+	    		lastTd.findElement(By.id("btnEditar")).click();
+
+	    		break;
+	    	}
+	    }
+	    
+	    List<WebElement> avancar = driver.findElements(By.className("link-avancar"));
+	    avancar.get(0).click();
+	    avancar.get(1).click();
+	    avancar.get(2).click();
+	    
+	    Thread.sleep(500);
+	    driver.findElement(By.id("btnEnviar")).click();
+	    Thread.sleep(1000);
+	    
+	    driver.get("https://hobama.imd.ufrn.br/planoDeAula/meusPlanosDeAula");
+	    
+	    table = driver.findElement(By.className("tabela-planoDeAula"));
+	    tbody = table.findElement(By.tagName("tbody"));
+	    
+	    for(WebElement tr: tbody.findElements(By.tagName("tr"))) {
+	    	List<WebElement> tds = tr.findElements(By.tagName("td"));
+	    	if(tds.get(2).findElement(By.tagName("i")).getAttribute("title").contains("Aguardando")) {
+	    		assertTrue(true);
+	    		return ;
+	    	}
+	    }
 	    
 	}
 	
