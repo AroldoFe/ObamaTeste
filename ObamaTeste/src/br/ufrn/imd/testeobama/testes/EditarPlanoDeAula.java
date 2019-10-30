@@ -1,6 +1,7 @@
 package br.ufrn.imd.testeobama.testes;
 
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -23,6 +24,7 @@ public class EditarPlanoDeAula {
 		driver = new ChromeDriver();
 		driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
 	}
+	
 	@Test
 	public void test() throws InterruptedException {
 		// login
@@ -46,6 +48,12 @@ public class EditarPlanoDeAula {
 	    					driver.findElement(By.name("planoDeAula.titulo")).clear();
 	    					driver.findElement(By.name("planoDeAula.titulo")).sendKeys("Funções3");
 	    					driver.findElement(By.id("btn-salvarRascunho")).click();
+	    					for(WebElement btn: driver.findElements(By.tagName("button"))) {
+	    						if(true) {
+	    							System.out.println();
+	    						}
+	    					}
+	    					Thread.sleep(2000);
 	    					driver.get("https://hobama.imd.ufrn.br/planoDeAula/meusPlanosDeAula");
 	    				    List<WebElement> as = driver.findElements(By.tagName("a"));
 	    				    for(WebElement b: as) {
@@ -63,29 +71,12 @@ public class EditarPlanoDeAula {
 	    		}
 	    	}
 	    }
-	    //fail();
+	    fail();
 	    
 	}
 	
 	@After
 	public void tearDown() throws Exception {
-		/*driver.get("https://hobama.imd.ufrn.br/planoDeAula/meusPlanosDeAula");
-		boolean achou = false;
-	    List<WebElement> trs = driver.findElements(By.tagName("tr"));
-	    for(WebElement tr: trs) {
-	    	for(WebElement td: tr.findElements(By.tagName("td"))) {	
-	    		for(WebElement a: td.findElements(By.tagName("a"))) {
-	    			if(achou) {
-	    				if(a.)
-	    			} else {
-	    				if(a.getText().contains("Funções")) {
-		    				achou = true;
-		    			}
-	    			}
-	    		}
-	    	}
-	    }*/
-		
 		driver.quit();
 	}
 }

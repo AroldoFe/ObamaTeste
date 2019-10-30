@@ -33,6 +33,7 @@ public class TestDeletarPlanoDeAula {
 	    driver.findElement(By.id("senha")).clear();
 	    driver.findElement(By.id("senha")).sendKeys("t35t30b4m4");
 	    driver.findElements(By.id("btn-entrar")).get(1).click();
+	    
 	    // Verificando se foi cadastrado
 	    driver.get("https://hobama.imd.ufrn.br/planoDeAula/meusPlanosDeAula");
 	    List<WebElement> as = driver.findElements(By.tagName("a"));
