@@ -16,7 +16,7 @@ import org.openqa.selenium.chrome.ChromeDriver;
 
 public class TestObama {
 	private WebDriver driver;
-	private String driverPath = "/home/aroldo-felix/√Årea de Trabalho/ObamaTeste/chromedriver";
+	private String driverPath = "assets/chromedriver.exe";
 	
 	@Before
 	public void setUp() throws Exception {
@@ -35,10 +35,10 @@ public class TestObama {
 	
 	@Test
 	public void testCadastroPlanoAula() throws InterruptedException {
-	    // Acessando formul√°rio
+	    // Acessando formul·rio
 	    driver.get("https://hobama.imd.ufrn.br/planoDeAula/formNovo");
 	    driver.findElement(By.name("planoDeAula.escola")).sendKeys("UFRN");
-	    driver.findElement(By.name("planoDeAula.titulo")).sendKeys("Fun√ß√µes");
+	    driver.findElement(By.name("planoDeAula.titulo")).sendKeys("FunÁıes");
 	    driver.findElement(By.name("planoDeAula.duracaoEmMinutos")).sendKeys("50");
 	    driver.findElements(By.className("link-avancar")).get(0).click();
 	    driver.findElement(By.className("CodeMirror-code")).click();
@@ -50,7 +50,7 @@ public class TestObama {
 	    driver.get("https://hobama.imd.ufrn.br/planoDeAula/meusPlanosDeAula");
 	    List<WebElement> as = driver.findElements(By.tagName("a"));
 	    for(WebElement a: as) {
-	    	if(a.getText().contains("Fun√ß√µes")) {
+	    	if(a.getText().contains("FunÁıes")) {
 	    		assertTrue(true);
 	    		return;
 	    	}
@@ -59,58 +59,71 @@ public class TestObama {
 	}
 	
 	@Test
-	public void testEditarPlanoDeAula() {
-	    // Acessando formul√°rio
+	public void testEditarPlanoDeAula() throws InterruptedException {
+		testCadastroPlanoAula();
+	    // Acessando formul·rio
 	    // Verificando se foi cadastrado
 	    driver.get("https://hobama.imd.ufrn.br/planoDeAula/meusPlanosDeAula");
-	    List<WebElement> trs = driver.findElements(By.tagName("tr"));
-	    boolean achou = false;
-	    for(WebElement tr: trs) {
-	    	for(WebElement td: tr.findElements(By.tagName("td"))) {	
-	    		for(WebElement a: td.findElements(By.tagName("a"))) {
-	    			if(achou) {
-	    				if(a.getAttribute("id").contains("btnEditar")) {
-	    					a.click();
-	    					driver.findElement(By.name("planoDeAula.titulo")).clear();
-	    					driver.findElement(By.name("planoDeAula.titulo")).sendKeys("Fun√ß√µes3");
-	    					driver.findElement(By.id("btn-salvarRascunho")).click();
-	    					driver.get("https://hobama.imd.ufrn.br/planoDeAula/meusPlanosDeAula");
-	    				    List<WebElement> as = driver.findElements(By.tagName("a"));
-	    				    for(WebElement b: as) {
-	    				    	if(b.getText().contains("Fun√ß√µes3")) {
-	    				    		assertTrue(true);
-	    				    		return;
-	    				    	}
-	    				    }
-	    				}
-	    			} else {
-	    				if(a.getText().contains("Fun√ß√µes")) {
-		    				achou = true;
-		    			}
-	    			}
-	    		}
+	    
+	    WebElement table = driver.findElement(By.className("tabela-planoDeAula"));
+	    WebElement tbody = table.findElement(By.tagName("tbody"));
+	    
+	    for(WebElement tr: tbody.findElements(By.tagName("tr"))) {
+	    	List<WebElement> tds = tr.findElements(By.tagName("td"));
+	    	if(tds.get(0).getText().contains("FunÁıes")) {
+	    		WebElement lastTd = tds.get(tds.size() - 1);
+	    		lastTd.findElement(By.id("btnEditar")).click();
+
+	    		break;
 	    	}
 	    }
+	    
+	    Thread.sleep(2000);
+
+	    driver.findElement(By.name("planoDeAula.titulo")).clear();
+		driver.findElement(By.name("planoDeAula.titulo")).sendKeys("FunÁıes3");
+		driver.findElement(By.id("btn-salvarRascunho")).click();
+		
+		Thread.sleep(2000);
+		
+		driver.get("https://hobama.imd.ufrn.br/planoDeAula/meusPlanosDeAula");
+	    
+		table = driver.findElement(By.className("tabela-planoDeAula"));
+	    tbody = table.findElement(By.tagName("tbody"));
+	    
+		for(WebElement tr: tbody.findElements(By.tagName("tr"))) {
+	    	List<WebElement> tds = tr.findElements(By.tagName("td"));
+	    	if(tds.get(0).getText().contains("FunÁıes3")) {
+	    		assertTrue(true);
+	    		return ;
+	    	}
+	    }
+		
 	    fail();
 	}
 	
 	@Test
-	public void testDeletarPlanosDeAula(){
-	    
+	public void testDeletarPlanosDeAula() throws InterruptedException{
+		testCadastroPlanoAula();
+		
 	    // Verificando se foi cadastrado
 	    driver.get("https://hobama.imd.ufrn.br/planoDeAula/meusPlanosDeAula");
-	    List<WebElement> as = driver.findElements(By.tagName("a"));
-	    for(WebElement a: as) {
-	    	if(a.getAttribute("id").contains("btnRemover")) {
-	    		a.click();
-	    		driver.switchTo().alert().accept();
-	    	}
+	    
+	    
+	    for (;;) {
+	    	List<WebElement> btns = driver.findElements(By.id("btnRemover"));
+	    	
+	    	if (btns != null && !btns.isEmpty()) {
+		    	WebElement btn = btns.get(0);
+		    	btn.click();
+		    	driver.switchTo().alert().accept();
+		    	driver.get("https://hobama.imd.ufrn.br/planoDeAula/meusPlanosDeAula");
+	    	} else break;
 	    }
 	    
-	    for(WebElement a: as) {
-	    	if(a.getAttribute("id").contains("btnRemover")) {
-	    		fail();
-	    	}
+	    List<WebElement> btns = driver.findElements(By.id("btnRemover"));
+	    if(!(btns == null || btns.isEmpty())) {
+	    	fail();
 	    }
 	    assertTrue(true);
 	    
