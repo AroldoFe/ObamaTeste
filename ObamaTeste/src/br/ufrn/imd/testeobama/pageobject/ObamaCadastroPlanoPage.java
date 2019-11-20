@@ -53,7 +53,7 @@ public class ObamaCadastroPlanoPage {
 		
 		linkAvancar.get(0).click();
 		
-		campoPlano.click();
+//		campoPlano.click();
 		
 		linkAvancar.get(1).click();
 		

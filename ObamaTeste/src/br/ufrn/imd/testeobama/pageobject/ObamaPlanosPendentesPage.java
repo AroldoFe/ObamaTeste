@@ -1,5 +1,4 @@
 package br.ufrn.imd.testeobama.pageobject;
-
 import java.util.List;
 
 import org.openqa.selenium.By;
@@ -14,14 +13,12 @@ public class ObamaPlanosPendentesPage {
 	
 	private WebDriver driver;
 	
-	@FindBy(className="form-control input-sm")
+	@FindBy(className="input-sm")
 	private List<WebElement> campoBusca;
 	
 	@FindBy(className="tabela-planoDeAula")
 	private List<WebElement> planosTable;
 	
-	@FindBy(className="modal-content")
-	private List<WebElement> modalAtribuirRevisor;
 	
 	private WebElement tbody;
 	
@@ -31,10 +28,11 @@ public class ObamaPlanosPendentesPage {
 		this.driver = driver;
 		this.driver.get(urlBase);
 		PageFactory.initElements(this.driver, this);
-		tbody.findElement(By.tagName("body"));
+		tbody = driver.findElements(By.tagName("tbody")).get(0);
 	}
 	
 	public void setCampoBuscar(String nome){
+		campoBusca = driver.findElements(By.className("input-sm"));
 		campoBusca.get(0).clear();
 		campoBusca.get(0).sendKeys(nome);
 		planosTable = driver.findElements(By.className("planosTable"));
@@ -54,15 +52,27 @@ public class ObamaPlanosPendentesPage {
 		List<WebElement> tds = tr.findElements(By.tagName("td"));
 		WebElement botao = tds.get(2).findElement(By.tagName("a"));
 		botao.click();
-		modalAtribuirRevisor = driver.findElements(By.className("modal-content"));
 	}
 	
 	public void atribuirRevisor(String email) {
-		WebElement campoEmailRevisor = modalAtribuirRevisor.get(0).findElement(By.id("inputEmail"));
-		WebElement botaoSalvar =  modalAtribuirRevisor.get(0).findElement(By.id("btn-salvar-add-revisor"));
+		WebElement campoEmailRevisor = driver.findElements(By.name("emailRevisor")).get(0);
+		WebElement botaoSalvar =  driver.findElement(By.id("btn-salvar-add-revisor"));
 		campoEmailRevisor.clear();
-		campoEmailRevisor.sendKeys("email");
+		campoEmailRevisor.sendKeys(email);
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		botaoSalvar.click();
+		try {
+			Thread.sleep(7000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	public boolean verificarAtribuicaoDeRevisor(WebElement tr) {
@@ -72,6 +82,14 @@ public class ObamaPlanosPendentesPage {
 			return true;
 		}
 		return false;
+	}
+	
+	public void validar(String plano) {
+		driver.get(urlBase);
+		
+		this.setCampoBuscar(plano);
+		WebElement tr = this.buscarPlanoDeAula(plano);
+		tr.findElement(By.id("btnValidar")).click();
 	}
 	
 

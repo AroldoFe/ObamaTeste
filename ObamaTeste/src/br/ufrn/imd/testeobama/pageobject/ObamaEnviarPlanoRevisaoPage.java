@@ -24,7 +24,15 @@ public class ObamaEnviarPlanoRevisaoPage {
 	    avancar.get(1).click();
 	    avancar.get(2).click();
 	    
-	    // TODO Terminar
+	    try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			System.out.println("DEU RUIM ");
+		}
+	    
+	    driver.findElement(By.id("btnEnviar")).click();
+	    
+	    
 	}
 
 }

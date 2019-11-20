@@ -21,7 +21,7 @@ public class ObamaAvaliacaoPrimeiroRevisorPage {
 		this.driver.get(baseUrl);
 	}
 	
-	public void func(String plano) {
+	public void avalia(String plano) {
 		barraPesquisa.clear();
 		barraPesquisa.sendKeys(plano);
 		
