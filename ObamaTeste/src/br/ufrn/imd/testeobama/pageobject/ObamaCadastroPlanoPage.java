@@ -7,6 +7,8 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
+import br.ufrn.imd.testeobama.pageobject.utils.Utils;
+
 public class ObamaCadastroPlanoPage {
 	private WebDriver driver;
 	
@@ -31,7 +33,7 @@ public class ObamaCadastroPlanoPage {
 	@FindBy(id="btn-salvarRascunho")
 	private WebElement btnSalvarRascunho;
 	
-	private static final String urlBase = "https://hobama.imd.ufrn.br/planoDeAula/formNovo";
+	private static final String urlBase = Utils.URL_BASE + "/planoDeAula/formNovo";
 
 	public ObamaCadastroPlanoPage(WebDriver driver) {
 		this.driver = driver;
@@ -39,12 +41,12 @@ public class ObamaCadastroPlanoPage {
 		PageFactory.initElements(this.driver, this);
 	}
 	
-	public void cadastrar() {
+	public void cadastrar(String nome_plano) {
 		campoEscola.clear();
 		campoEscola.sendKeys("UFRN");
 		
 		campoTitulo.clear();
-		campoTitulo.sendKeys("Funções");
+		campoTitulo.sendKeys(nome_plano);
 		
 		campoDuracaoMinutos.clear();
 		campoDuracaoMinutos.sendKeys("50");

@@ -23,6 +23,8 @@ public class ObamaEnviarPlanoRevisaoPage {
 	    avancar.get(0).click();
 	    avancar.get(1).click();
 	    avancar.get(2).click();
+	    
+	    // TODO Terminar
 	}
 
 }

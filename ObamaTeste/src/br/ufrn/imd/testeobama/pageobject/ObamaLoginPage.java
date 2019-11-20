@@ -7,6 +7,8 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
+import br.ufrn.imd.testeobama.pageobject.utils.Utils;
+
 public class ObamaLoginPage {
 	private WebDriver driver;
 	
@@ -19,7 +21,7 @@ public class ObamaLoginPage {
 	@FindBy(id="btn-entrar")
 	private List<WebElement> btnEntrar;
 	
-	private static final String urlBase = "https://www.hobama.imd.ufrn.br";
+	private static final String urlBase = Utils.URL_BASE + "/login/form";
 	
 	public ObamaLoginPage(WebDriver driver) {
 		this.driver = driver;
@@ -35,5 +37,9 @@ public class ObamaLoginPage {
 		campoSenha.sendKeys(senha);
 		
 		btnEntrar.get(1).click();
+	}
+	
+	public void logout() {
+		driver.get(Utils.URL_BASE + "/logout");
 	}
 }
